@@ -4,7 +4,7 @@
 
 class BaseDAO {
 	
-	private $HOST = "localhost";
+	private $HOST = "127.0.0.1";
 	private $DB_NAME = "fiscalize";
 	private $USER = "fiscalize";
 	private $PASSWORD = "fiscalize";

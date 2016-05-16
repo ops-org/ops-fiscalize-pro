@@ -72,6 +72,17 @@ class FiscalizeController {
 		}
 		return $strHTML;
 	}
+
+	public function consultarFiscalizacoesJson() {
+		try {
+			$fiscalizeDAO = new FiscalizeDAO();
+			$fiscalizacoes = $fiscalizeDAO->consultarFiscalizacoes();
+			
+			return json_encode($fiscalizacoes);
+		} catch(FiscalizacaoException $e) {
+			return json_encode($e->getMessage()); 
+		}
+	}
 	
 }
 ?>
