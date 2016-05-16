@@ -80,7 +80,18 @@ class FiscalizeController {
 			
 			return json_encode($fiscalizacoes);
 		} catch(FiscalizacaoException $e) {
-			return json_encode($e->getMessage()); 
+			return "{\"erro\": \"$e->getMessage()\"}"; 
+		}
+	}
+
+	public function consultarNotaFiscalJson($notaFiscalId) {
+		try {
+			$fiscalizeDAO = new FiscalizeDAO();
+			$notaFiscal = $fiscalizeDAO->consultarNotaFiscal($notaFiscalId);
+		
+			return json_encode($notaFiscal);	
+		} catch(NotaFiscalException $e) {
+			return "{\"erro\": \"$e->getMessage()\"}"; 
 		}
 	}
 	

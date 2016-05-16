@@ -1,3 +1,7 @@
+<?php
+	include_once 'includes/web_include.php';
+	include_once INCLUDE_ROOT.'/controllers/FiscalizeController.class.php';
+?>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -27,8 +31,6 @@
 	    <script src="bootstrap/js/bootstrap.min.js"></script>
 	    
 		<?php
-			include_once 'web_include.php';
-			include_once INCLUDE_ROOT.'/controllers/FiscalizeController.class.php';
 		
 			$fiscalizeController = new FiscalizeController();
 	
