@@ -55,12 +55,16 @@ class FiscalizeDAO extends BaseDAO {
 
 	public function consultarFiscalizacoes() {
 		
-		$sql = "SELECT suspeitas.notaFiscalId as notaFiscalId, suspeitas.soma as somaSuspeitas, confiaveis.soma as somaConfiaveis, suspeitas.soma+confiaveis.soma as somaFiscalizacoes, if(confiaveis.soma=0, suspeitas.soma, suspeitas.soma/confiaveis.soma) as razaoConfiaveis"
-			  ." FROM"
-				." 	(SELECT COUNT(*) as soma, NotaFiscal.notaFiscalId FROM NotaFiscal LEFT JOIN Suspeita ON NotaFiscal.notaFiscalId=Suspeita.notaFiscalId WHERE suspeita=true GROUP BY notaFiscalId) as suspeitas"
+		$sql = "SELECT suspeitas.notaFiscalId as notaFiscalId, suspeitas.soma as somaSuspeitas, confiaveis.soma as somaConfiaveis,"
+				." suspeitas.soma+confiaveis.soma as somaFiscalizacoes, if(confiaveis.soma=0, suspeitas.soma, suspeitas.soma/confiaveis.soma) as razaoConfiaveis,"
+				." parlamentar.nome, notafiscal.valor"
+				." FROM"
+				." ((SELECT COUNT(*) as soma, NotaFiscal.notaFiscalId FROM NotaFiscal LEFT JOIN Suspeita ON NotaFiscal.notaFiscalId=Suspeita.notaFiscalId WHERE suspeita=true GROUP BY notaFiscalId) as suspeitas"
 				." INNER JOIN"
-				."  (SELECT COUNT(*) as soma, NotaFiscal.notaFiscalId FROM NotaFiscal LEFT JOIN Suspeita ON NotaFiscal.notaFiscalId=Suspeita.notaFiscalId WHERE suspeita=false GROUP BY notaFiscalId) as confiaveis"				
-				." ON suspeitas.notaFiscalId = confiaveis.notaFiscalId"
+				." (SELECT COUNT(*) as soma, NotaFiscal.notaFiscalId FROM NotaFiscal LEFT JOIN Suspeita ON NotaFiscal.notaFiscalId=Suspeita.notaFiscalId WHERE suspeita=false GROUP BY notaFiscalId) as confiaveis"
+				." ON suspeitas.notaFiscalId = confiaveis.notaFiscalId)"
+				." INNER JOIN NotaFiscal as notafiscal ON (notafiscal.notaFiscalId = suspeitas.notaFiscalId)"
+				." INNER JOIN Parlamentar as parlamentar ON (parlamentar.parlamentarId = notafiscal.parlamentarId)"
 				." ORDER BY razaoConfiaveis DESC, somaFiscalizacoes DESC, notaFiscalId"
 				." LIMIT 100";
 		
@@ -68,10 +72,10 @@ class FiscalizeDAO extends BaseDAO {
 		if($statement = parent::preparar($sql)) {
 			try {
 				$statement->execute();
-				$statement->bind_result($notaFiscalId, $somaSuspeitas, $somaConfiaveis, $somaFiscalizacoes, $razaoConfiaveis); 
+				$statement->bind_result($notaFiscalId, $somaSuspeitas, $somaConfiaveis, $somaFiscalizacoes, $razaoConfiaveis, $parlamentar, $valor); 
 				while ($statement->fetch()) {
 					$fiscalizacao = new Fiscalizacao();
-					$fiscalizacao->popular($notaFiscalId, $somaSuspeitas, $somaConfiaveis, $somaFiscalizacoes, $razaoConfiaveis);
+					$fiscalizacao->popular($notaFiscalId, $somaSuspeitas, $somaConfiaveis, $somaFiscalizacoes, $razaoConfiaveis, $parlamentar, $valor);
 					$fiscalizacoes[] = $fiscalizacao;
 				}
 				$statement->free_result();

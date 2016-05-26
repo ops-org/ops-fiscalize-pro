@@ -1,7 +1,8 @@
 <?php
+include_once INCLUDE_ROOT.'/framework/base/BaseController.class.php';
 include_once INCLUDE_ROOT.'/daos/FiscalizeDAO.class.php';
 
-class FiscalizeController {
+class FiscalizeController extends BaseController {
 	
 	public function consultarNotaFiscal($notaFiscalId) {
 		$strHTML = "";
@@ -89,7 +90,9 @@ class FiscalizeController {
 			$fiscalizeDAO = new FiscalizeDAO();
 			$notaFiscal = $fiscalizeDAO->consultarNotaFiscal($notaFiscalId);
 		
-			return json_encode($notaFiscal);	
+			$json = json_encode($notaFiscal);
+
+			return $json;
 		} catch(NotaFiscalException $e) {
 			return "{\"erro\": \"$e->getMessage()\"}"; 
 		}
