@@ -98,6 +98,18 @@ class FiscalizeController extends BaseController {
 				$notaFiscal->cpfCnpj = parent::formatCpfCnpj($notaFiscal->cpfCnpj);
 			}
 
+			if($notaFiscal->valor) {
+				$notaFiscal->valor = parent::formatCurrency($notaFiscal->valor);
+			}
+
+			if($notaFiscal->valorGlosa) {
+				$notaFiscal->valorGlosa = parent::formatCurrency($notaFiscal->valorGlosa);
+			}
+
+			if($notaFiscal->valorLiquido) {
+				$notaFiscal->valorLiquido = parent::formatCurrency($notaFiscal->valorLiquido);
+			}
+
 			$json = json_encode($notaFiscal);
 
 			return $json;

@@ -19,5 +19,9 @@ class BaseController {
 		return $return;
 	}
 
+	public function formatCurrency($strCurrency) {
+		return "R$ ".str_replace(".", ",", $strCurrency);
+	}
+
 }
 ?>
