@@ -78,6 +78,20 @@ class FiscalizeController extends BaseController {
 		try {
 			$fiscalizeDAO = new FiscalizeDAO();
 			$fiscalizacoes = $fiscalizeDAO->consultarFiscalizacoes();
+
+			foreach ($fiscalizacoes as $notaFiscal) {
+				if($notaFiscal->valor) {
+					$notaFiscal->valor = parent::formatCurrency($notaFiscal->valor);
+				}
+
+				if($notaFiscal->valorGlosa) {
+					$notaFiscal->valorGlosa = parent::formatCurrency($notaFiscal->valorGlosa);
+				}
+
+				if($notaFiscal->valorLiquido) {
+					$notaFiscal->valorLiquido = parent::formatCurrency($notaFiscal->valorLiquido);
+				}
+			}
 			
 			return json_encode($fiscalizacoes);
 		} catch(FiscalizacaoException $e) {
