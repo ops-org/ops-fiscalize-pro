@@ -90,6 +90,14 @@ class FiscalizeController extends BaseController {
 			$fiscalizeDAO = new FiscalizeDAO();
 			$notaFiscal = $fiscalizeDAO->consultarNotaFiscal($notaFiscalId);
 		
+			if($notaFiscal->dataEmissao) {
+				$notaFiscal->dataEmissao = parent::formatDate($notaFiscal->dataEmissao);
+			}
+			
+			if($notaFiscal->cpfCnpj) {
+				$notaFiscal->cpfCnpj = parent::formatCpfCnpj($notaFiscal->cpfCnpj);
+			}
+
 			$json = json_encode($notaFiscal);
 
 			return $json;
